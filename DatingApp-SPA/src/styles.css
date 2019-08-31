@@ -4,6 +4,7 @@
 @import '../node_modules/font-awesome/css/font-awesome.min.css';
 @import '../node_modules/alertifyjs/build/css/alertify.min.css';
 @import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
+@import '../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css';
 
 .tab-panel {
     border: 1px solid #ddd;
@@ -57,4 +58,9 @@
 
 .member-tabset > .nav-tabs > li.active > a > span {
     color: #333333;
+}
+
+.form-control:focus {
+    border-color: #772953;
+    box-shadow: 0 0 0 0.2rem rgba(125, 60, 95, 0.25);
 }
