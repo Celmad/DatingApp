@@ -25,11 +25,11 @@ export class PhotoEditorComponent implements OnInit {
     this.initializeUploader();
   }
 
-  fileOverBase(e: any): void {
+  public fileOverBase(e: any): void {
     this.hasBaseDropZoneOver = e;
   }
 
-  initializeUploader() {
+  public initializeUploader() {
     this.uploader = new FileUploader({
       url: this.baseUrl + 'users/' + this.authService.decodedToken.nameid + '/photos',
       authToken: 'Bearer ' + localStorage.getItem('token'),
@@ -53,11 +53,16 @@ export class PhotoEditorComponent implements OnInit {
           isMain: res.isMain
         };
         this.photos.push(photo);
+        if (photo.isMain) {
+          this.authService.changeMemberPhoto(photo.url);
+          this.authService.currentUser.photoUrl = photo.url;
+          localStorage.setItem('user', JSON.stringify(this.authService.currentUser));
+        }
       }
     };
   }
 
-  setMainPhoto(photo: Photo) {
+  public setMainPhoto(photo: Photo) {
     this.userService.setMainPhoto(this.authService.decodedToken.nameid, photo.id).subscribe(() => {
       this.currentMain = this.photos.filter(p => p.isMain === true)[0];
       this.currentMain.isMain = false;
@@ -70,7 +75,7 @@ export class PhotoEditorComponent implements OnInit {
     });
   }
 
-  deletePhoto(id: number) {
+  public deletePhoto(id: number) {
     this.alertify.confirm('Are you sure you want to delete this photo?', () => {
       this.userService.deletePhoto(this.authService.decodedToken.nameid, id).subscribe(() => {
         this.photos.splice(this.photos.findIndex(p => p.id === id), 1); // We delete just 1 photo
