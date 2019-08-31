@@ -39,8 +39,8 @@ export class AuthService {
       );
   }
 
-  public register(model: any) {
-    return this.http.post(this.baseUrl + 'register', model);
+  public register(user: User) {
+    return this.http.post(this.baseUrl + 'register', user);
   }
 
   public loggedIn() {
