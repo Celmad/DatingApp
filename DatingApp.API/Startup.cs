@@ -82,6 +82,8 @@ namespace DatingApp.API
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseDefaultFiles(); // will look for our static files where it expect it (wwwroot)
+            app.UseStaticFiles(); // allow us to use our angular application in localhost:5000
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
