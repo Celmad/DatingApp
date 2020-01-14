@@ -61,7 +61,7 @@ namespace DatingApp.API.Controllers
 
                 return Ok(new
                 {
-                    token = GenerateJwtToken(userFull),
+                    token = GenerateJwtToken(userFull).Result,
                     user // this needs to be user to match what the client expects
                 });
             }
