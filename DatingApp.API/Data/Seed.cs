@@ -25,9 +25,10 @@ namespace DatingApp.API.Data
 
                 foreach (var user in users)
                 {
+                    user.Photos.SingleOrDefault().IsApproved = true;
                     // we are not inside an async method, so we are using Wait() to make use of CreateAsync
                     userManager.CreateAsync(user, "password").Wait();
-                    userManager.AddToRoleAsync(user, "Member");
+                    userManager.AddToRoleAsync(user, "Member").Wait();
                 }
 
                 // create admin user

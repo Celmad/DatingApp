@@ -60,6 +60,10 @@ namespace DatingApp.API.Data
                 .HasOne(u => u.Recipient)
                 .WithMany(m => m.MessagesReceived)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // We want to filter in only the approved photos
+            // this can be ignore where we want to see the unapproved photos e.g. moderators to approve photos
+            builder.Entity<Photo>().HasQueryFilter(p => p.IsApproved);
         }
     }
 }
