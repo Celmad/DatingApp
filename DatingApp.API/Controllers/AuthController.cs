@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using DatingApp.API.Data;
 using DatingApp.API.Dtos;
 using DatingApp.API.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -25,10 +26,17 @@ namespace DatingApp.API.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IDatingRepository _repo;
 
-        public AuthController(IConfiguration config, IMapper mapper, UserManager<User> userManager, SignInManager<User> signInManager)
+        public AuthController(
+            IConfiguration config, 
+            IMapper mapper, 
+            UserManager<User> userManager, 
+            SignInManager<User> signInManager,
+            IDatingRepository repo)
         {
             _signInManager = signInManager;
+            _repo = repo;
             _userManager = userManager;
             _mapper = mapper;
             _config = config;
@@ -58,6 +66,15 @@ namespace DatingApp.API.Controllers
             if (result.Succeeded)
             {
                 var user = _mapper.Map<UserForListDto>(userFull);
+
+                // UserManager doesn't return navigation properties such as ICollections,
+                // therefore, we need to especifically retrieve the user's main photo url for the nav image
+                if (string.IsNullOrEmpty(user.PhotoUrl))
+                {
+                    var userMainPhoto = await _repo.GetMainPhotoForUser(userFull.Id);
+                    if (userMainPhoto != null)
+                        user.PhotoUrl = userMainPhoto.Url;
+                }
 
                 return Ok(new
                 {
