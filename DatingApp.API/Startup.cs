@@ -38,10 +38,11 @@ namespace DatingApp.API
 
         public void ConfigureProductionServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(x => x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            // use for MySQL
+            // services.AddDbContext<DataContext>(x => x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
 
             // use for SQL Server
-            //services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             ConfigureServices(services);
         }
@@ -113,21 +114,22 @@ namespace DatingApp.API
             }
             else
             {
-                app.UseExceptionHandler(builder => {
-                    builder.Run(async context => {
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                // app.UseExceptionHandler(builder => {
+                //     builder.Run(async context => {
+                //         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-                        var error = context.Features.Get<IExceptionHandlerFeature>();
-                        if (error != null)
-                        {
-                            context.Response.AddApplicationError(error.Error.Message);
-                            await context.Response.WriteAsync(error.Error.Message);
-                        }
-                    });
-                });
-                // app.UseHsts();
+                //         var error = context.Features.Get<IExceptionHandlerFeature>();
+                //         if (error != null)
+                //         {
+                //             context.Response.AddApplicationError(error.Error.Message);
+                //             await context.Response.WriteAsync(error.Error.Message);
+                //         }
+                //     });
+                // });
+                app.UseHsts();
             }
-            // app.UseHttpsRedirection();
+            app.UseDeveloperExceptionPage();
+            app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
